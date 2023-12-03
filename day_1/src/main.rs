@@ -1,11 +1,16 @@
-use aoc::{Runner, Part};
+use std::collections::HashMap;
+
+use aoc::{Part, Runner};
 
 fn main() {
     let input = include_str!("../input");
 
     let mut day1 = Day1 {};
 
-    day1.run_both_parts(input);
+    println!(
+        "{}",
+        day1.part1_optimized(input)
+    );
 }
 
 #[test]
@@ -44,6 +49,44 @@ pub struct Day1;
 impl Runner for Day1 {
     fn year_and_day(&self) -> (usize, usize) {
         (2023, 1)
+    }
+
+    fn part1_optimized(&mut self, input: &str) -> i32 {
+        #[rustfmt::skip]
+        let num_map = HashMap::from([
+            //("one", 1), ("two", 2), ("three", 3), ("four", 4), ("five", 5), ("six", 6), ("seven", 7), ("eight", 8), ("nine", 9),
+            ("1", 1), ("2", 2), ("3", 3), ("4", 4), ("5", 5), ("6", 6), ("7", 7), ("8", 8), ("9", 9),
+        ]);
+        input
+            .lines()
+            .map(|line| {
+                let mut i = 0;
+                let mut first = 0;
+                'first: loop {
+                    let it = &line[i..line.len()];
+                    for key in num_map.keys() {
+                        if it.starts_with(key) {
+                            first = num_map[key];
+                            break 'first;
+                        }
+                    }
+                    i += 1;
+                }
+                let mut last = 0;
+                i = 0;
+                'last: loop {
+                    let it = &line[0..line.len() - i];
+                    for key in num_map.keys() {
+                        if it.ends_with(key) {
+                            last = num_map[key];
+                            break 'last;
+                        }
+                    }
+                    i += 1;
+                }
+                first * 10 + last
+            })
+            .sum()
     }
 
     fn part1(&mut self, input: &str) -> i32 {
