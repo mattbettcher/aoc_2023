@@ -11,6 +11,9 @@ pub trait Runner {
 
     fn part1(&mut self, input: &str) -> i32;
     fn part2(&mut self, input: &str) -> i32;
+
+    fn part1_optimized(&mut self, _input: &str) -> i32 { todo!() }
+    fn part2_optimized(&mut self, _input: &str) -> i32 { todo!() }
     
     fn test(&mut self, part: Part, test_input: &str, answer: i32) {
         let (res, part_str) = match part {
